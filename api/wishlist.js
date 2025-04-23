@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const { SHOPIFY_ACCESS_TOKEN, SHOPIFY_STORE } = process.env;
-
+const SHOPIFY_ACCESS_TOKEN = "39994d34af8891132b4d7623215ba1d7-1745316868";
+const  SHOPIFY_STORE = "whiskyandmore.co.nz";
 export default async function handler(req, res) {
   const { method } = req;
 
