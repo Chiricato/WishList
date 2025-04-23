@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     );
 
     let metafield = metafieldsRes.data.metafields.find(
-      (m) => m.namespace === "custom" && m.key === "demo"
+      (m) => m.namespace === "wishlist" && m.key === "items"
     );
 
     let wishlist = metafield ? JSON.parse(metafield.value) : [];
@@ -41,8 +41,8 @@ export default async function handler(req, res) {
 
     const metafieldPayload = {
       metafield: {
-        value: JSON.stringify(wishlist),
-        value_type: 'json_string',
+        value: JSON.stringify({ id: wishlist }),
+        type: 'json',
       },
     };
 
@@ -61,7 +61,7 @@ export default async function handler(req, res) {
             namespace: 'wishlist',
             key: 'items',
             type: 'json',
-            value: JSON.stringify(wishlist),
+            value: JSON.stringify({ id: wishlist }),
             owner_id: customerId,
             owner_resource: 'customer',
           },
