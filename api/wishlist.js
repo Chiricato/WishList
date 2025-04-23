@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     );
 
     let metafield = metafieldsRes.data.metafields.find(
-      (m) => m.namespace === "wishlist" && m.key === "items"
+      (m) => m.namespace === "demo" && m.key === "items"
     );
 
     let wishlist = metafield ? JSON.parse(metafield.value) : [];
