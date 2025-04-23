@@ -73,6 +73,6 @@ export default async function handler(req, res) {
     return res.json({ success: true, wishlist });
   } catch (error) {
     console.error(error.response?.data || error.message);
-    return res.status(500).json({ error: error.response?.data || error.message });
+    return res.status(500).json({ error: error.response?.data || error.message, SHOPIFY_STORE:SHOPIFY_STORE });
   }
 }
