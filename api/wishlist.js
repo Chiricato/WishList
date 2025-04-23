@@ -48,13 +48,13 @@ export default async function handler(req, res) {
 
     if (metafield) {
       metafieldPayload.metafield.id = metafield.id;
-      await axios.put(
+      const response = await axios.put(
         `https://${SHOPIFY_STORE}/admin/api/2025-04/metafields/${metafield.id}.json`,
         metafieldPayload,
         { headers }
       );
     } else if (method === 'POST') {
-      await axios.post(
+      const response = await axios.post(
         `https://${SHOPIFY_STORE}/admin/api/2025-04/metafields.json`,
         {
           metafield: {
@@ -70,7 +70,14 @@ export default async function handler(req, res) {
       );
     }
 
-    return res.json({ success: true, wishlist });
+    return res.json({ success: true, wishlist, response: response.data, metafield: {
+            namespace: 'wishlist',
+            key: 'items',
+            type: 'json',
+            value: JSON.stringify({ id: wishlist }),
+            owner_id: customerId,
+            owner_resource: 'customer',
+          } });
   } catch (error) {
     console.error(error.response?.data || error.message);
     return res.status(500).json({ error: error.response?.data || error.message, SHOPIFY_STORE:SHOPIFY_STORE, customerId:customerId });
