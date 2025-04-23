@@ -25,20 +25,25 @@ export default async function handler(req, res) {
       (m) => m.namespace === "wishlist" && m.key === "items"
     );
 
-    let wishlist = metafield ? JSON.parse(metafield.value) : [];
-
+    let wishlist = metafield ? JSON.parse(metafield.value) : { id: [] };
+    if (!Array.isArray(wishlist.id)) {
+      wishlist.id = wishlist.id ? [wishlist.id] : [];
+    }
+    console.log(wishlist);
     if (method === 'GET') {
-      return res.json({ wishlist, metafield:metafield, check: "demo" });
+      return res.json({ wishlist, metafield, check: 'demo' });
     }
 
     if (method === 'POST') {
-      if (!wishlist.includes(productId)) wishlist.push(productId);
+      if (!wishlist.id.includes(productId)) {
+        wishlist.id.push(productId);
+      }
     }
 
     if (method === 'DELETE') {
-      wishlist = wishlist.filter((item) => item !== productId);
+      wishlist.id = wishlist.id.filter((item) => item !== productId);
     }
-
+    
     const metafieldPayload = {
       metafield: {
         value: JSON.stringify({ id: wishlist }),
@@ -70,14 +75,7 @@ export default async function handler(req, res) {
       );
     }
 
-    return res.json({ success: true, wishlist, response: response.data, metafield: {
-            namespace: 'wishlist',
-            key: 'items',
-            type: 'json',
-            value: JSON.stringify({ id: wishlist }),
-            owner_id: customerId,
-            owner_resource: 'customer',
-          } });
+    return res.json({ success: true, wishlist, response: response.data });
   } catch (error) {
     console.error(error.response?.data || error.message);
     return res.status(500).json({ error: error.response?.data || error.message, SHOPIFY_STORE:SHOPIFY_STORE, customerId:customerId });
