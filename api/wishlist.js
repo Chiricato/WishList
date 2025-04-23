@@ -4,11 +4,11 @@ const { SHOPIFY_ACCESS_TOKEN, SHOPIFY_STORE } = process.env;
 export default async function handler(req, res) {
   const { method } = req;
 
-  const customerId = req.method === 'GET' ? req.query.customerId : req.body.customerId;
+  const customerId = req.method === 'GET' ? req.query.customerId : req.body?.customerId;
   const productId = req.body?.productId;
 
   if (!customerId || (method !== 'GET' && !productId)) {
-    return res.status(400).json({ error: 'Missing customerId or productId' });
+    return res.status(400).json({ error: 'Missing customerId or productId', customerId:customerId, productId:productId });
   }
 
   const headers = {
